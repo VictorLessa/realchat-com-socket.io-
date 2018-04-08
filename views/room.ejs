@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js
+"></script>
+    <title>Chat em tempo real</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css" />    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <style>
+        html {background-color: #3273dc;}
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages .msg { padding: 5px 10px; }
+        #messages .otr:nth-child(odd) .tag { background: #eee; }
+        .corpo-chat {height: 500px; overflow-y: scroll;}
+        .field-chat{width: 100%;}
+        .connect {opacity: .6;}
+        span.vc{color: blueviolet;}
+        .tag {height: auto !important; padding: 5px;white-space: unset !important;word-break: break-all;}
+    </style>
+</head>
+<body class="is-primary">
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title has-text-white">
+                    Chat em tempo real
+                </h1>
+                <h2 class="subtitle has-text-light">
+                    Com socket.io
+                </h2>
+            </div>
+            <input type="hidden" id="id" value="<%=id.selecao%>">
+            <input type="hidden" id="myid" value="<%=id.id%>">
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="card" id="chat-top" >
+                <form id="msgForm">
+                    <div class="card-content corpo-chat" id="chat">
+                        <div id="messages"></div>
+                    </div>
+                    <footer class="card-footer">
+                        <div class="field has-addons field-chat">
+                            <div class="control is-expanded">
+                                <input placeholder="Mensagem aqui" class="input is-medium" id="m" autocomplete="off" placeholder="" />
+                             </div>
+                        
+                            <div class="control">
+                                <button type="button" class="button is-primary is-medium" id="enviarmsg">Enviar</button>
+                            </div>
+                        </div>
+                    </footer>
+                </form>
+            </div>
+            
+        </div>
+    </section>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+           
+            var socket = io();
+  
+            socket.on('connect', function(){
+                var myid = $('#myid').val();
+                var idamigo = $('#id').val();
+               socket.emit('envaridpararoom', {
+                idamigo: idamigo,
+                myid: myid
+               });
+            });
+
+            socket.on('abrir', function(carr){
+                $('#messages').append('<li>' + carr.msg + '<li>');
+ 
+            });
+
+           $('#enviarmsg').click(function(){
+                var msg = $('#m').val();
+                var idamigo = $('#id').val();
+                var myid = $('#myid').val();
+                socket.emit('msg privada',{msg: msg,
+                myid: myid,
+                idamigo: idamigo});
+           });
+        
+           socket.on('add msg', function(msg){
+            var id = $('#myid').val();
+            if(msg.id != id){
+                $('#messages').append('<li>' + msg.msg + '<li>');
+            }else{
+                $('#messages').append('<li align="rigth">' + msg.msg + '<li>');
+            }
+           });
+
+        </script>
+    </body>
+</html>
