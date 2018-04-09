@@ -12,7 +12,7 @@ clientes = [{
 
 mensagem = [];
 
-
+room = {};
 app.set('io', io);
 
 
@@ -55,8 +55,11 @@ io.on('connection', function(socket){
 		socket.on('envaridpararoom', function(ids){
 			
 			msg =   ids.myid * ids.idamigo;
-			console.log(msg);
 
+			room[ids.myid] = {
+				'socket': socket.id
+			};
+			console.log(room);
 			for(var i=0; i < mensagem.length; i++){
 				if(mensagem[i].id == msg){
 					//console.log(mensagem[i].msg);
@@ -64,6 +67,7 @@ io.on('connection', function(socket){
 						msg: mensagem[i].msg,
 						id: mensagem[i].id
 						});
+
 					}
 			}
 		});
@@ -74,8 +78,9 @@ io.on('connection', function(socket){
 				
 			msg.id = msg.idamigo * msg.myid;
 			mensagem.push(msg);
-			console.log(mensagem);
+			console.log(room[msg.idamigo].socket);
 			socket.emit('add msg', msg);
+			socket.to(room[msg.idamigo].socket).emit('add msg', msg);
 		});
 
 		socket.on('room', function(room){
