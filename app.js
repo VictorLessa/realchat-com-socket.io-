@@ -18,7 +18,7 @@ app.set('io', io);
 
 
 io.on('connection', function(socket){
-	
+
 
 		socket.on('adduser', function(user){
 			for(var i =0; i < clientes.length; i++){
@@ -28,7 +28,7 @@ io.on('connection', function(socket){
 				}
 					
 					
-			}
+			} 
 			if(cadastro){
 						console.log('usuario existe');
 					}else{
@@ -55,7 +55,7 @@ io.on('connection', function(socket){
 		socket.on('envaridpararoom', function(ids){
 			
 			msg =   ids.myid * ids.idamigo;
-
+			socket.join(msg);
 			room[ids.myid] = {
 				'socket': socket.id
 			};
@@ -78,9 +78,10 @@ io.on('connection', function(socket){
 				
 			msg.id = msg.idamigo * msg.myid;
 			mensagem.push(msg);
+
 			console.log(room[msg.idamigo].socket);
 			socket.emit('add msg', msg);
-			socket.to(room[msg.idamigo].socket).emit('add msg', msg);
+			socket.to(msg.id).emit('add msg', msg);
 		});
 
 		socket.on('room', function(room){
