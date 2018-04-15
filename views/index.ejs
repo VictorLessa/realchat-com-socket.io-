@@ -1,69 +1,42 @@
-<!doctype html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="Jhonatan Pereira - jhonatan.me">
-    <title>Chat em tempo real</title>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js
-"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css" />    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <style>
-        html {background-color: #3273dc;}
-        #messages { list-style-type: none; margin: 0; padding: 0; }
-        #messages .msg { padding: 5px 10px; }
-        #messages .otr:nth-child(odd) .tag { background: #eee; }
-        .corpo-chat {height: 500px; overflow-y: scroll;}
-        .field-chat{width: 100%;}
-        .connect {opacity: .6;}
-        span.vc{color: blueviolet;}
-        .tag {height: auto !important; padding: 5px;white-space: unset !important;word-break: break-all;}
-    </style>
-</head>
-<body class="is-primary">
-    <section class="hero">
-        <div class="hero-body">
-            <div class="container">
-                <h1 class="title has-text-white">
-                    Chat em tempo real
-                </h1>
-                <h2 class="subtitle has-text-light">
-                    Com socket.io
-                </h2>
-            </div>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <div id="nick" >
-                <form accept-charset="UTF-8" role="form" class="form-signin" action="/lista" method="post">
-                                <fieldset>
-                                    <label class="panel-login">
-                                        <div class="login_result"></div>
-                                    </label>
-                                    <input class="form-control" placeholder="Nome ou apelido" id="nickname" name="nick" type="text">
-                                    <input class="form-control" placeholder="Nome ou apelido" id="id_usuario" name="id" type="text">
-                                    <br></br>
-                                    <input class="btn btn-lg btn-success btn-block" type="submit" id="entrar" value="Entrar »">
-                                </fieldset>
-                            </form>
-            </div>
-            
-            
-        </div>
-    </section>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="./socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
+    <head>
+        <link rel="stylesheet" href="css/index.css">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="js/index.js"></script>
+                <!------ Include the above in your HEAD tag ---------->
 
-        $('#entrar').click(function(){
-            var nick = $('#nickname').val();
-            var id_usuario = $('#id_usuario').val();
-        
-            socket.emit('adduser',{nick: nick, idusuario: id_usuario});
-        });
-    </script>
+    <!--
+    you can substitue the span of reauth email for a input with the email and
+    include the remember me checkbox
+    -->
+    </head>
+    <body>
+        <div class="container">
+            <div class="card card-container">
+                <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+                <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+                <p id="profile-name" class="profile-name-card"></p>
+                <form class="form-signin" action="/chat" method="POST">
+                    <span id="reauth-email" class="reauth-email"></span>
+                    <input type="text" id="inputEmail" name="nome" class="form-control" placeholder="Email address" required autofocus>
+                    <input type="password" id="inputPassword" name="senha" class="form-control" placeholder="Password" required>
+                    <div id="remember" class="checkbox">
+                        <label>
+                            <input type="checkbox" value="remember-me"> Remember me
+                        </label>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                </form><!-- /form -->
+                <a href="#" class="forgot-password">
+                    Forgot the password?
+                </a>
+            </div><!-- /card-container -->
+        </div><!-- /container -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+        </script>
     </body>
 </html>
