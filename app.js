@@ -1,6 +1,6 @@
 var app = require('./server');
 
-var servidor = app.listen(80, ()=>{
+var servidor = app.listen(3000, ()=>{
     console.log('funcionando');
 });
 
